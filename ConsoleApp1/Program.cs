@@ -1,278 +1,275 @@
-﻿using System;
-
-// Завдання 1: Клас Triangle (Трикутник)
-public class Triangle
+﻿namespace Lab3Charp
 {
-    // Захищені поля
-    protected int a, b, c;
-    protected int color;
-
-    // Конструктор з перевіркою існування трикутника
-    public Triangle(int sideA, int sideB, int sideC, int triangleColor = 0)
+    using System;
+    internal class Program
     {
-        if (IsValidTriangle(sideA, sideB, sideC))
-        {
-            a = sideA;
-            b = sideB;
-            c = sideC;
-            color = triangleColor;
-        }
-        else
-        {
-            throw new ArgumentException("Неможливо створити трикутник з такими сторонами!");
-        }
-    }
-
-    // Перевірка існування трикутника
-    private bool IsValidTriangle(int sideA, int sideB, int sideC)
-    {
-        return (sideA + sideB > sideC) && (sideA + sideC > sideB) && (sideB + sideC > sideA) &&
-               sideA > 0 && sideB > 0 && sideC > 0;
-    }
-
-    // Властивості для сторін (з перевіркою)
-    public int SideA
-    {
-        get { return a; }
-        set
-        {
-            if (IsValidTriangle(value, b, c))
-                a = value;
-            else
-                throw new ArgumentException("Некоректна довжина сторони!");
-        }
-    }
-
-    public int SideB
-    {
-        get { return b; }
-        set
-        {
-            if (IsValidTriangle(a, value, c))
-                b = value;
-            else
-                throw new ArgumentException("Некоректна довжина сторони!");
-        }
-    }
-
-    public int SideC
-    {
-        get { return c; }
-        set
-        {
-            if (IsValidTriangle(a, b, value))
-                c = value;
-            else
-                throw new ArgumentException("Некоректна довжина сторони!");
-        }
-    }
-
-    // Властивість для кольору (тільки для читання)
-    public int Color
-    {
-        get { return color; }
-    }
-
-    // Метод для виведення довжин сторін
-    public void PrintSides()
-    {
-        Console.WriteLine($"Сторони трикутника: a = {a}, b = {b}, c = {c}");
-    }
-
-    // Метод розрахунку периметра
-    public int CalculatePerimeter()
-    {
-        return a + b + c;
-    }
-
-    // Метод розрахунку площі за формулою Герона
-    public double CalculateArea()
-    {
-        double p = CalculatePerimeter() / 2.0; // напівпериметр
-        return Math.Sqrt(p * (p - a) * (p - b) * (p - c));
-    }
-
-    // Метод для виведення повної інформації
-    public void Show()
-    {
-        PrintSides();
-        Console.WriteLine($"Периметр: {CalculatePerimeter()}");
-        Console.WriteLine($"Площа: {CalculateArea():F2}");
-        Console.WriteLine($"Колір: {color}");
-        Console.WriteLine();
-    }
-}
-
-// Завдання 2: Ієрархія класів друкованих видань
-
-// Базовий клас - Друковане видання
-public class PrintedPublication
-{
-    protected string title;
-    protected string author;
-    protected int year;
-    protected int pages;
-
-    public PrintedPublication(string title, string author, int year, int pages)
-    {
-        this.title = title;
-        this.author = author;
-        this.year = year;
-        this.pages = pages;
-    }
-
-    public virtual void Show()
-    {
-        Console.WriteLine($"Назва: {title}");
-        Console.WriteLine($"Автор: {author}");
-        Console.WriteLine($"Рік видання: {year}");
-        Console.WriteLine($"Кількість сторінок: {pages}");
-    }
-
-    // Властивість для сортування
-    public int Pages { get { return pages; } }
-    public string Title { get { return title; } }
-}
-
-// Похідний клас - Книга
-public class Book : PrintedPublication
-{
-    protected string genre;
-    protected string isbn;
-
-    public Book(string title, string author, int year, int pages, string genre, string isbn)
-        : base(title, author, year, pages)
-    {
-        this.genre = genre;
-        this.isbn = isbn;
-    }
-
-    public override void Show()
-    {
-        Console.WriteLine("=== КНИГА ===");
-        base.Show();
-        Console.WriteLine($"Жанр: {genre}");
-        Console.WriteLine($"ISBN: {isbn}");
-        Console.WriteLine();
-    }
-}
-
-// Похідний клас - Журнал
-public class Magazine : PrintedPublication
-{
-    protected int issueNumber;
-    protected string frequency;
-
-    public Magazine(string title, string author, int year, int pages, int issueNumber, string frequency)
-        : base(title, author, year, pages)
-    {
-        this.issueNumber = issueNumber;
-        this.frequency = frequency;
-    }
-
-    public override void Show()
-    {
-        Console.WriteLine("=== ЖУРНАЛ ===");
-        base.Show();
-        Console.WriteLine($"Номер випуску: {issueNumber}");
-        Console.WriteLine($"Періодичність: {frequency}");
-        Console.WriteLine();
-    }
-}
-
-// Похідний клас - Підручник
-public class Textbook : Book
-{
-    protected string subject;
-    protected string educationLevel;
-
-    public Textbook(string title, string author, int year, int pages, string genre, string isbn, 
-                   string subject, string educationLevel)
-        : base(title, author, year, pages, genre, isbn)
-    {
-        this.subject = subject;
-        this.educationLevel = educationLevel;
-    }
-
-    public override void Show()
-    {
-        Console.WriteLine("=== ПІДРУЧНИК ===");
-        Console.WriteLine($"Назва: {title}");
-        Console.WriteLine($"Автор: {author}");
-        Console.WriteLine($"Рік видання: {year}");
-        Console.WriteLine($"Кількість сторінок: {pages}");
-        Console.WriteLine($"Жанр: {genre}");
-        Console.WriteLine($"ISBN: {isbn}");
-        Console.WriteLine($"Предмет: {subject}");
-        Console.WriteLine($"Рівень освіти: {educationLevel}");
-        Console.WriteLine();
-    }
-}
-
-// Головний клас програми
-class Program
-{
-    static void Main()
-    {
-        Console.OutputEncoding = System.Text.Encoding.UTF8;
+        /* 
         
-        // Демонстрація роботи з трикутниками
-        Console.WriteLine("=== РОБОТА З ТРИКУТНИКАМИ ===");
-        
-        try
-        {
-            Triangle[] triangles = new Triangle[]
-            {
-                new Triangle(3, 4, 5, 1),
-                new Triangle(6, 8, 10, 2),
-                new Triangle(5, 5, 5, 3),
-                new Triangle(7, 24, 25, 4)
-            };
+        Старт першого завдання
 
-            foreach (Triangle triangle in triangles)
+        */
+        class Point
+        {
+            private int x;
+            private int y;
+            private int c;
+            public Point()
             {
-                triangle.Show();
+                this.x = 0;
+                this.y = 0;
+                this.c = 0;
+            }
+            public Point(int dX, int dY, int color)
+            {
+                this.x = dX;
+                this.y = dY;
+                this.c = color;
+            }
+
+            public void getCords()
+            {
+                Console.WriteLine("X,Y = " + this.x + "," + this.y);
+            }
+
+            public double getDistance()
+            {
+                double distance = Math.Sqrt((x * x) + (y * y));
+                Console.WriteLine("Distance = " + distance);
+                return distance;
+            }
+
+            public void moveByVector(int x1, int y1)
+            {
+                Console.WriteLine("Old dot:" + this.x + "," + this.y);
+                this.x += x1;
+                this.y += y1;
+                Console.WriteLine("New dot:" + this.x + "," + this.y);
+            }
+
+            public int X
+            {
+                get { return this.x; }
+                set { this.x = value; }
+            }
+
+            public int Y
+            {
+                get { return this.y; }
+                set { this.y = value; }
+            }
+
+            public int Color
+            {
+                get { return this.c; }
             }
         }
-        catch (ArgumentException ex)
+
+        /* 
+        
+        Кінець першого завдання
+        
+        */
+        /* 
+        
+        Початок другого завдання
+        
+        */
+
+        class Person
         {
-            Console.WriteLine($"Помилка: {ex.Message}");
+            protected string Name;
+            protected int age;
+            protected int Salary;
+
+            public Person(string name, int age, int salary)
+            {
+                this.Name = name;
+                this.age = age;
+                this.Salary = salary;
+            }
+
+            public virtual void Show()
+            {
+                Console.WriteLine("Name: " + this.Name + ", Age: " + this.Age + ", Salary: " + this.Salary);
+            }
+
+            public int Age
+            {
+                get { return age; }
+            }
         }
 
-        Console.WriteLine("\n=== РОБОТА З ДРУКОВАНИМИ ВИДАННЯМИ ===");
-        
-        // Створення масиву друкованих видань
-        PrintedPublication[] publications = FillPublicationsArray();
-        
-        Console.WriteLine("Початковий масив:");
-        foreach (PrintedPublication pub in publications)
+        class Student : Person
         {
-            pub.Show();
+            private string Faculty;
+
+            public Student(string name, int age, string faculty) : base(name, age, 0)
+            {
+                this.Faculty = faculty;
+            }
+
+            public override void Show()
+            {
+                Console.WriteLine("Student: " + this.Name + ", Age: " + this.Age + ", Faculty: " + this.Faculty);
+            }
         }
 
-        // Сортування за кількістю сторінок
-        Array.Sort(publications, (x, y) => x.Pages.CompareTo(y.Pages));
-        
-        Console.WriteLine("Масив, відсортований за кількістю сторінок:");
-        foreach (PrintedPublication pub in publications)
+        class Teacher : Person
         {
-            pub.Show();
-        }
-    }
+            protected string Subject;
+            protected int Experience;
 
-    // Функція наповнення масиву різними об'єктами
-    static PrintedPublication[] FillPublicationsArray()
-    {
-        return new PrintedPublication[]
+            public Teacher(string name, int age, int salary, string subject, int experience) : base(name, age, salary)
+            {
+                this.Subject = subject;
+                this.Experience = experience;
+            }
+
+            public override void Show()
+            {
+                Console.WriteLine("Teacher: " + this.Name + ", Age: " + this.Age + ", Subject: " + this.Subject + ", Experience: " + this.Experience + " years, Salary: " + this.Salary);
+            }
+        }
+
+        class HeadOfDepartment : Teacher
         {
-            new Magazine("Наука і життя", "Редколегія", 2023, 64, 12, "Щомісячно"),
-            new Book("Майстер і Маргарита", "Михайло Булгаков", 1967, 480, "Фантастика", "978-5-17-082454-8"),
-            new Textbook("Алгебра", "Мерзляк А.Г.", 2020, 256, "Навчальна література", 
-                        "978-966-11-0234-5", "Математика", "8 клас"),
-            new Magazine("Комп'ютерне обладнання", "Tech Team", 2023, 48, 3, "Щомісячно"),
-            new Book("Кобзар", "Тарас Шевченко", 1840, 200, "Поезія", "978-966-03-4567-8"),
-            new Textbook("Фізика", "Божинова Ф.Я.", 2021, 320, "Навчальна література", 
-                        "978-966-11-1234-5", "Фізика", "10 клас")
-        };
+            private string Department;
+
+            public HeadOfDepartment(string name, int age, int salary, string subject, int experience, string department) : base(name, age, salary, subject, experience)
+            {
+                this.Department = department;
+            }
+
+            public override void Show()
+            {
+                Console.WriteLine("Head of Department: " + this.Name + ", Age: " + this.Age + ", Subject: " + this.Subject + ", Experience: " + this.Experience + " years, Department: " + this.Department + ", Salary: " + this.Salary);
+            }
+        }
+
+        /* 
+        
+        Кінець другого завдання
+        
+        */
+
+        static void Main(string[] args)
+        {
+
+            void task1()
+            {
+
+                Console.WriteLine("Create Point in (2,1) with colour 255");
+                Point dot = new Point(2, 1, 255);
+                dot.getCords();
+                dot.getDistance();
+
+                Console.WriteLine("Moving by vector (5,7)");
+                dot.moveByVector(5, 7);
+                Console.WriteLine("New cords");
+                dot.getCords();
+
+                Console.WriteLine("Sequence of Points");
+                Point[] points = new Point[]
+                {
+                    new Point(3, 4, 100),
+                    new Point(-5, 12, 200),
+                    new Point(8, -15, 150),
+                    new Point(7, 24, 50),
+                    new Point(-10, -10, 75)
+                };
+
+                foreach (var point in points)
+                {
+                    point.getCords();
+                    point.getDistance();
+                }
+
+                double avgDistance = 0;
+                foreach (var point in points)
+                {
+                    avgDistance += point.getDistance();
+                }
+                avgDistance /= points.Length;
+
+                Console.WriteLine("Average distance: " + avgDistance);
+                Console.WriteLine("Moving Point (that farther than average) by vector (-2,-3):");
+
+                foreach (var point in points)
+                {
+                    if (point.getDistance() > avgDistance)
+                    {
+                        point.moveByVector(-2, -3);
+                    }
+                    point.getCords();
+                }
+            }
+
+            void task2()
+            {
+                Person[] people = new Person[]{
+                    new Student("Andrey", 20, "FMI"),
+                    new Student("Maria", 22, "FBR"),
+                    new Teacher("Petro", 45, 25000, "Mathematics", 20),
+                    new Teacher("Olena", 38, 27000, "Programming", 15),
+                    new HeadOfDepartment("Serhiy", 50, 35000, "Computer Science", 25, "IT Department")
+                };
+
+                Console.WriteLine("Data before sorting:");
+
+                foreach (var person in people)
+                {
+                    person.Show();
+                }
+
+                for (int i = 0; i < people.Length - 1; i++)
+                {
+                    for (int j = 0; j < people.Length - i - 1; j++)
+                    {
+                        if (people[j].Age > people[j + 1].Age)
+                        {
+                            Person temp = people[j];
+                            people[j] = people[j + 1];
+                            people[j + 1] = temp;
+                        }
+                    }
+                }
+
+                Console.WriteLine("\nData after sorting by age:");
+                foreach (var person in people)
+                {
+                    person.Show();
+                }
+            }
+
+            void choose_task()
+            {
+                Console.Write("1. Point\n2. Hierarchy\n");
+                int answer = Convert.ToInt16(System.Console.ReadLine());
+
+                switch (answer)
+                {
+                    case 1:
+                        {
+                            task1();
+                            Console.Write("\n\n\n");
+                            choose_task();
+                            break;
+                        }
+                    case 2:
+                        {
+                            task2();
+                            Console.Write("\n\n\n");
+                            choose_task();
+                            break;
+                        }
+                    default:
+                        {
+                            choose_task();
+                            break;
+                        }
+                }
+            }
+            choose_task();
+        }
     }
 }
